@@ -1,5 +1,5 @@
 # OceanPulse
-
+🚀 **Live Demo:** https://oceanpulse.streamlit.app
 An ML-based multi-signal ocean stress prediction system for early detection of marine ecosystem collapse.
 
 ## What is OceanPulse?
@@ -23,9 +23,9 @@ July scores 100/100 on the stress scale. June scores 83.8. August scores 91.8. J
 - [x] Phase 1 - Domain research and setup
 - [x] Phase 2 - Data collection (SST, DO, Chlorophyll)
 - [x] Phase 3 - Master dataset and composite stress score
-- [ ] Phase 4 - LSTM Autoencoder anomaly detection
-- [ ] Phase 5 - Multi-signal fusion model
-- [ ] Phase 6 - Streamlit dashboard
+- [x] Phase 4 - LSTM Autoencoder anomaly detection
+- [x] Phase 5 - Multi-signal fusion model
+- [x] Phase 6 - Streamlit dashboard
 
 ## Author
 
