@@ -45,7 +45,7 @@ fig_signals.update_layout(yaxis_title="Normalized Value (0-1)", xaxis_title="Dat
 st.plotly_chart(fig_signals, use_container_width=True)
 
 st.subheader("Raw Signal Data")
-st.dataframe(df[['month','sst','dissolved_oxygen','chlorophyll','stress_score']], use_container_width=True)
+st.dataframe(df[['time','sst','dissolved_oxygen','chlorophyll','stress_score']], use_container_width=True)
 
 st.divider()
-st.markdown("**OceanPulse** · Built by Harvansh Singh · Data: NASA MUR SST, WOA13, MODIS-Aqua")
+st.markdown("**OceanPulse** · Built by Harvansh Singh · Data: Copernicus CMEMS (GLORYS12V1 + BGC reanalysis)")
