@@ -9,7 +9,7 @@ st.set_page_config(page_title="OceanPulse", page_icon="🌊", layout="wide")
 @st.cache_data
 def load_data():
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    csv_path = os.path.join(base_dir, 'data', 'processed', 'master_dataset.csv')
+    csv_path = os.path.join(base_dir, 'data', 'processed', 'master_dataset_real.csv')
     df = pd.read_csv(csv_path)
     return df
 
