@@ -2,12 +2,15 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
+import os
 
 st.set_page_config(page_title="OceanPulse", page_icon="🌊", layout="wide")
 
 @st.cache_data
 def load_data():
-    df = pd.read_csv('../data/processed/master_dataset.csv')
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    csv_path = os.path.join(base_dir, 'data', 'processed', 'master_dataset.csv')
+    df = pd.read_csv(csv_path)
     return df
 
 df = load_data()
