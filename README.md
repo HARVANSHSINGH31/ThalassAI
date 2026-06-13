@@ -1,4 +1,4 @@
-# OceanPulse
+# ThalassAI
 
 **An ML-based multi-signal ocean ecosystem stress detection system for the Arabian Sea.**
 
