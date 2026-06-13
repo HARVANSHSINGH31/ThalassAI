@@ -71,20 +71,24 @@ for i in range(len(features) - seq_len):
 X = torch.tensor(np.array(sequences))
 
 @st.cache_resource
-def train_lstm(X):
+def train_lstm():
+    seq_len_inner = 6
+    feats = df[["sst_norm", "do_norm", "chl_norm"]].values.astype(np.float32)
+    seqs = [feats[i:i+seq_len_inner] for i in range(len(feats) - seq_len_inner)]
+    X_inner = torch.tensor(np.array(seqs))
     model = LSTMAutoencoder()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
     criterion = nn.MSELoss()
     model.train()
     for epoch in range(100):
         optimizer.zero_grad()
-        out = model(X)
-        loss = criterion(out, X)
+        out = model(X_inner)
+        loss = criterion(out, X_inner)
         loss.backward()
         optimizer.step()
     return model
 
-model = train_lstm(X)
+model = train_lstm()
 model.eval()
 with torch.no_grad():
     reconstructed = model(X).numpy()
