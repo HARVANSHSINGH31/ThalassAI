@@ -4,7 +4,7 @@ import numpy as np
 import plotly.graph_objects as go
 import os
 
-st.set_page_config(page_title="OceanPulse", page_icon="🌊", layout="wide")
+st.set_page_config(page_title="ThalassAI", page_icon="🌊", layout="wide")
 
 @st.cache_data
 def load_data():
@@ -15,7 +15,7 @@ def load_data():
 
 df = load_data()
 
-st.title("🌊 OceanPulse")
+st.title("🌊 ThalassAI")
 st.markdown("**Multi-Signal Ocean Ecosystem Stress Detection System**")
 st.markdown("*Arabian Sea · 20°N 65°E · Real oceanographic data*")
 st.divider()
@@ -129,4 +129,4 @@ st.subheader("Raw Signal Data")
 st.dataframe(df[['time','sst','dissolved_oxygen','chlorophyll','stress_score']], use_container_width=True)
 
 st.divider()
-st.markdown("**OceanPulse** · Built by Harvansh Singh · Data: Copernicus CMEMS (GLORYS12V1 + BGC reanalysis)")
+st.markdown("**ThalassAI** · Built by Harvansh Singh · Data: Copernicus CMEMS (GLORYS12V1 + BGC reanalysis)")
