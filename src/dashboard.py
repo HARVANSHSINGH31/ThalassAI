@@ -80,7 +80,7 @@ def train_lstm():
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
     criterion = nn.MSELoss()
     model.train()
-    for epoch in range(100):
+    for epoch in range(300):
         optimizer.zero_grad()
         out = model(X_inner)
         loss = criterion(out, X_inner)
@@ -94,7 +94,7 @@ with torch.no_grad():
     reconstructed = model(X).numpy()
 
 errors = np.mean((reconstructed - X.numpy()) ** 2, axis=(1, 2))
-threshold = float(np.mean(errors) + 2 * np.std(errors))
+threshold = float(np.mean(errors) + 1.5 * np.std(errors))
 anomaly_flags = errors > threshold
 times = pd.to_datetime(df["time"].values[seq_len:])
 
