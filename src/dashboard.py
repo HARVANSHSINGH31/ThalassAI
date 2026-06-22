@@ -125,6 +125,125 @@ for label, start, end, _ in events:
 st.dataframe(pd.DataFrame(summary), use_container_width=True, hide_index=True)
 
 
+
+st.divider()
+st.subheader("Ecological Impact Assessment")
+st.markdown("*Mapping stress signals to known biological thresholds from published literature*")
+
+# Threshold definitions from literature
+thresholds = {
+    "Hypoxic Zone (DO < 2 mg/L)": {
+        "signal": "dissolved_oxygen",
+        "operator": "lt",
+        "value": 2.0,
+        "impact": "Fish mortality, benthic organism die-off, dead zone formation",
+        "reference": "Diaz & Rosenberg, 2008 — Science"
+    },
+    "Severe Hypoxia (DO < 1 mg/L)": {
+        "signal": "dissolved_oxygen",
+        "operator": "lt",
+        "value": 1.0,
+        "impact": "Complete faunal exclusion, mass mortality events",
+        "reference": "Stramma et al., 2010 — Deep Sea Research"
+    },
+    "Thermal Stress (SST > 30°C)": {
+        "signal": "sst",
+        "operator": "gt",
+        "value": 30.0,
+        "impact": "Coral bleaching, seagrass die-off, species range shifts",
+        "reference": "Hughes et al., 2017 — Nature"
+    },
+    "Algal Bloom Risk (Chl-a > 0.4 mg/m³)": {
+        "signal": "chlorophyll",
+        "operator": "gt",
+        "value": 0.4,
+        "impact": "Harmful algal blooms, oxygen depletion, fisheries disruption",
+        "reference": "Anderson et al., 2012 — Harmful Algae"
+    },
+}
+
+# Compute months breaching each threshold
+impact_summary = []
+for name, config in thresholds.items():
+    sig = config["signal"]
+    val = config["value"]
+    op = config["operator"]
+    if op == "lt":
+        breached = df[df[sig] < val]
+    else:
+        breached = df[df[sig] > val]
+    
+    months = len(breached)
+    pct = round(months / len(df) * 100, 1)
+    peak_stress = round(breached["stress_score"].mean(), 1) if len(breached) > 0 else 0
+    
+    impact_summary.append({
+        "Threshold": name,
+        "Months breached": months,
+        "% of timeline": f"{pct}%",
+        "Avg stress score during breach": peak_stress,
+        "Biological impact": config["impact"],
+        "Source": config["reference"]
+    })
+
+impact_df = pd.DataFrame(impact_summary)
+st.dataframe(impact_df, use_container_width=True, hide_index=True)
+
+# Timeline chart — show which months breached critical thresholds
+st.markdown("**Critical threshold breaches over time:**")
+fig_impact = go.Figure()
+
+fig_impact.add_trace(go.Scatter(
+    x=pd.to_datetime(df["time"]),
+    y=df["stress_score"],
+    name="Stress Score",
+    line=dict(color="royalblue", width=2),
+    mode="lines"
+))
+
+# Shade hypoxic months
+hypoxic = df[df["dissolved_oxygen"] < 2.0]
+for _, row in hypoxic.iterrows():
+    fig_impact.add_vrect(
+        x0=row["time"], x1=row["time"],
+        fillcolor="red", opacity=0.3, line_width=2,
+        line_color="red"
+    )
+
+# Shade thermal stress months
+thermal = df[df["sst"] > 30.0]
+for _, row in thermal.iterrows():
+    fig_impact.add_vrect(
+        x0=row["time"], x1=row["time"],
+        fillcolor="orange", opacity=0.3, line_width=2,
+        line_color="orange"
+    )
+
+fig_impact.add_trace(go.Scatter(
+    x=[None], y=[None],
+    mode="markers",
+    marker=dict(color="red", size=10, symbol="square"),
+    name="Hypoxic zone (DO < 2 mg/L)"
+))
+fig_impact.add_trace(go.Scatter(
+    x=[None], y=[None],
+    mode="markers",
+    marker=dict(color="orange", size=10, symbol="square"),
+    name="Thermal stress (SST > 30°C)"
+))
+
+fig_impact.update_layout(
+    yaxis_title="Stress Score (0-100)",
+    xaxis_title="Date",
+    height=400,
+    showlegend=True,
+    legend=dict(orientation="h", yanchor="bottom", y=1.02)
+)
+st.plotly_chart(fig_impact, use_container_width=True)
+
+st.caption("Threshold values sourced from peer-reviewed oceanographic literature. DO values in mg/L, SST in °C, Chlorophyll-a in mg/m³.")
+
+
 st.subheader("Raw Signal Data")
 st.dataframe(df[['time','sst','dissolved_oxygen','chlorophyll','stress_score']], use_container_width=True)
 
