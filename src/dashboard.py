@@ -241,7 +241,7 @@ fig_impact.update_layout(
 )
 st.plotly_chart(fig_impact, use_container_width=True)
 
-st.caption("Threshold values sourced from peer-reviewed oceanographic literature. DO values in mg/L, SST in °C, Chlorophyll-a in mg/m³.")
+st.caption("Threshold values sourced from peer-reviewed oceanographic literature. SST in °C, Chlorophyll-a in mg/m³. Note: Surface DO in this dataset remains above hypoxic thresholds — Arabian Sea hypoxia primarily occurs at depth (150-1000m), not captured by surface reanalysis.")
 
 
 st.subheader("Raw Signal Data")
