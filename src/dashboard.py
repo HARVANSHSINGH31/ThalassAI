@@ -52,6 +52,10 @@ st.markdown("*Reconstruction error from LSTM Autoencoder — spikes indicate det
 import torch
 import torch.nn as nn
 
+torch.manual_seed(42)
+torch.use_deterministic_algorithms(True)
+np.random.seed(42)
+
 class LSTMAutoencoder(nn.Module):
     def __init__(self, input_size=3, hidden_size=32, num_layers=2):
         super().__init__()
