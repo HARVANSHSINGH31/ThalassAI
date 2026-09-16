@@ -75,30 +75,18 @@ for i in range(len(features) - seq_len):
 X = torch.tensor(np.array(sequences))
 
 @st.cache_resource
-def train_lstm():
-    seq_len_inner = 6
-    feats = df[["sst_norm", "do_norm", "chl_norm"]].values.astype(np.float32)
-    seqs = [feats[i:i+seq_len_inner] for i in range(len(feats) - seq_len_inner)]
-    X_inner = torch.tensor(np.array(seqs))
+def load_lstm():
     model = LSTMAutoencoder()
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
-    criterion = nn.MSELoss()
-    model.train()
-    for epoch in range(300):
-        optimizer.zero_grad()
-        out = model(X_inner)
-        loss = criterion(out, X_inner)
-        loss.backward()
-        optimizer.step()
+    model.load_state_dict(torch.load("models/lstm_arabian_sea.pt", map_location="cpu"))
+    model.eval()
     return model
 
-model = train_lstm()
-model.eval()
+model = load_lstm()
 with torch.no_grad():
     reconstructed = model(X).numpy()
 
 errors = np.mean((reconstructed - X.numpy()) ** 2, axis=(1, 2))
-threshold = float(np.mean(errors) + 1.8 * np.std(errors))
+threshold = float(np.mean(errors) + 1.5 * np.std(errors))
 anomaly_flags = errors > threshold
 times = pd.to_datetime(df["time"].values[seq_len:])
 
